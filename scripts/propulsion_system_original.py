@@ -210,6 +210,6 @@ ax4.set(ylabel='Fuel rack [%]',
 ax4.grid()
 fig.tight_layout()
 
-fig.savefig('test_plot1.svg')
-fig.savefig('test_plot1.png')
+fig.savefig('images/test_plot1.svg')
+fig.savefig('images/test_plot1.png')
 print(time.perf_counter() - start)
