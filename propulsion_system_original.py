@@ -23,7 +23,7 @@ from scipy import integrate
 
 # ----------- parameters for simulation --------------------------------------
 
-tmax = 36000  # simulation time [s]
+tmax = 1500  # simulation time [s]
 dt = 1  # timestep [s]
 
 # fuel properties
@@ -70,10 +70,10 @@ print('gearbox data loaded')
 
 # initial values
 in_p = 3.2830  # initial rpm
-iv_t_control = np.array([0, 0.1 * tmax, 0.2 * tmax, 0.5 * tmax,
-                         0.6 * tmax, 0.7 * tmax, tmax])
-X_parms = np.array([0.85, 0.85, 0.3, 0.4, 0.4, 1, 1])  # % maximum fuelrack
-Y_parms = np.array([1, 1, 1, 1, 1, 1, 1])  # disturbance factor
+iv_t_control = np.array([0, 0.2 * tmax, 0.2 * tmax, 0.4 * tmax,  0.4 * tmax, 0.6 * tmax, 0.6 * tmax, 0.8 * tmax,
+                         0.8 * tmax,  tmax])
+X_parms = np.array([1.0, 1.0, 0.75, 0.75, 0.5, 0.5, 0.25, 0.25, 0.01, 0.01])  # % maximum fuelrack
+Y_parms = np.array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1])  # disturbance factor
 
 # simulation control parameters
 xvals = np.linspace(0, tmax - 1, tmax)
