@@ -23,7 +23,7 @@ from scipy import integrate
 
 # ----------- parameters for simulation --------------------------------------
 
-tmax = 1500  # simulation time [s]
+tmax = 36000  # simulation time [s]
 dt = 1  # timestep [s]
 
 # fuel properties
