@@ -187,33 +187,117 @@ for k in range(tmax - 1):
 # EU just to be sure
 v_s[0] = v_s0
 v_s[1] = v_s0
+
 # -------------- Plot Figure -------------------------------------------------
 
 # create figure with four subplots
-fig = plt.figure(figsize=(10, 10))
-ax1 = fig.add_subplot(4, 1, 1)  # fig.add_subplot(#rows, #cols, #plot)
-ax1.plot(mytime[1:tmax - 2], v_s[1:tmax - 2])
-ax1.set(title='Ship Propulsion Output',
-        ylabel='Ship speed [m/s]',
+fig = plt.figure(figsize=(10, 60))
+
+# Figuur 1
+fig.tight_layout(pad = 1, h_pad = 1)
+plt.subplots_adjust(hspace = 0.35)
+ax1 = fig.add_subplot(20, 1, 1)  # fig.add_subplot(#rows, #cols, #plot)
+ax1.plot(mytime[1:tmax-2], v_s[1:tmax-2])
+ax1.set(ylabel='Ship speed [m/s]',
         xlabel='Time [s]')
 ax1.grid()
-ax2 = fig.add_subplot(4, 1, 2)
-ax2.plot(mytime[1:tmax - 2], s[1:tmax - 2])
+
+ax2 = fig.add_subplot(20, 1, 2)
+ax2.plot(mytime[1:tmax-2], s[1:tmax-2])
 ax2.set(ylabel='Distance traveled [m]',
         xlabel='Time [s]')
 ax2.grid()
-ax3 = fig.add_subplot(4, 1, 3)
-ax3.plot(mytime[1:tmax - 2], out_fc[1:tmax - 2])
+
+ax3 = fig.add_subplot(20, 1, 3)
+ax3.plot(mytime[1:tmax-2], out_fc[1:tmax-2])
 ax3.set(ylabel='Fuel consumed [g]',
         xlabel='Time [s]')
 ax3.grid()
-ax4 = fig.add_subplot(4, 1, 4)
-ax4.plot(mytime[1:tmax - 2], ov_X_set[1:tmax - 2])
+
+ax4 = fig.add_subplot(20, 1, 4)
+ax4.plot(mytime[1:tmax-2], ov_X_set[1:tmax-2])
 ax4.set(ylabel='Fuel rack [%]',
         xlabel='Time [s]')
 ax4.grid()
-fig.tight_layout()
 
-fig.savefig('images/opdracht1_1_plot.svg')
-fig.savefig('images/opdracht1_1_plot.png')
-print(time.perf_counter() - start)
+# Figuur 2
+ax6 = fig.add_subplot(20, 1, 5)
+ax6.plot(mytime[1 : tmax], 60 * n_p[1 : tmax], label = "Propeller RPS")
+ax6.plot(mytime[1 : tmax], 60 * n_e[1 : tmax], label = "Diesel Engine RPS")
+ax6.set(ylabel='RPS [Hz]',
+        xlabel='Time [s]')
+ax6.grid()
+ax6.legend()
+
+#figuur 3
+ax5 = fig.add_subplot(20, 1, 6)
+ax5.plot(v_s[1:tmax - 2], R[1:tmax - 2])
+ax5.set(xlabel='Ship speed [m/s]',
+        ylabel='Ship resistance [N]')
+ax5.grid()
+
+
+#figuur 4
+ax7 = fig.add_subplot(20, 1, 7)
+ax7.plot(v_a[1: tmax - 1], F_prop[1 : tmax - 1])
+ax7.set(ylabel = 'Thrust Power',
+        xlabel = 'Advance Velocity')
+ax7.grid()
+
+#figuur 5
+ax9 = fig.add_subplot(20, 1, 8)
+ax9.plot(60 * n_p[1:tmax - 2], M_prop[1:tmax - 2])
+ax9.set(xlabel='Propeller RPS [Hz]',
+        ylabel='Propeller Torque [N]')
+ax9.grid()
+
+#figuur 6
+ax8 = fig.add_subplot(20, 1, 9)
+ax8.plot(60 * n_e[1 : tmax-2], M_b[1 : tmax-2])
+ax8.set(ylabel = 'Engine torque',
+        xlabel = 'Diesel Engine RPS')
+ax8.grid()
+
+#figuur 7
+
+ax10 = fig.add_subplot(20, 1, 10)
+ax10.plot(mytime[1 : tmax-2], P_E[1:tmax-2])
+ax10.set(xlabel='Time [s]',
+         ylabel='Engine Power [W]')
+ax10.grid()
+
+ax11 = fig.add_subplot(20, 1, 11)
+ax11.plot(mytime[1 : tmax-2], P_p[1 : tmax-2])
+ax11.set(xlabel = "Time [s]",
+         ylabel = "Propeller Power [W]")
+ax11.grid()
+
+ax12 = fig.add_subplot(20, 1, 12)
+ax12.plot(mytime[1 : tmax-2], P_b[1 : tmax-2])
+ax12.set(xlabel = "Time [s]",
+         ylabel = "Brake Power [W]")
+ax12.grid()
+
+ax13 = fig.add_subplot(20, 1, 13)
+ax13.plot(mytime[1: tmax - 2], Q_f[1 : tmax - 2])
+ax13.set(xlabel = "Time [s]",
+         ylabel = "Q_f [-]")
+ax13.grid()
+
+ax14 = fig.add_subplot(20, 1, 14)
+ax14.plot(mytime[1 : tmax-2], eta_TRM[1 : tmax-2])
+ax14.set(xlabel = "Time [s]",
+         ylabel = "Transmission Efficiency [-]")
+ax14.grid()
+
+ax15 = fig.add_subplot(20, 1, 15)
+ax15.plot(mytime[1 : tmax-2], eta_e[1 : tmax-2])
+ax15.set(xlabel = "Time [s]",
+         ylabel = "Nominal Engine Efficiency [-]")
+ax15.grid()
+
+ax16 = fig.add_subplot(20, 1, 16)
+ax16.plot(eta_e[1 : tmax -2], P_b[1 : tmax-2])
+ax16.set(xlabel = "Nominal Engine Efficiency [-]",
+         ylabel = "Brake Power [W]")
+ax16.grid()
