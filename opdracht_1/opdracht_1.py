@@ -134,6 +134,7 @@ P_b = np.zeros(tmax)  # Engine brake power [kW]
 P_T = np.zeros(tmax)  # Thrust power [kW]
 P_E = np.zeros(tmax)  # Engine power [kW]
 J = np.zeros(tmax)  # Advance ratio [-]
+
 Q_f = np.zeros(tmax)
 eta_TRM = np.zeros(tmax)
 eta_e = np.zeros(tmax)
