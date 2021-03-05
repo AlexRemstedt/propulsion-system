@@ -136,7 +136,7 @@ P_E = np.zeros(tmax)  # Engine power [kW]
 J = np.zeros(tmax)  # Advance ratio [-]
 
 Q_f = np.zeros(tmax)
-eta_TRM = np.zeros(tmax)
+eta_TRM = np.full(tmax, 0.95)
 eta_e = np.zeros(tmax)
 
 # ------------- Run simulation -----------------------------------------------
