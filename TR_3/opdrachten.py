@@ -68,4 +68,7 @@ if __name__ == '__main__':
     c)  Bepaal de stuwkracht T en het benodigde askopppel Q in beide condities:
             T = {None}
             Q = {None}
+    d)  Hoeveel kan het open water rendement verbeterd worden in de vissende conditie door gebruik te maken 
+        van een verstelbare schroef (variabele spoed) en hoe groot is dan de optimale spoedverhouding voor de 
+        vissende conditie? J, K_T en K_Q blijven gelijk.
     """)
