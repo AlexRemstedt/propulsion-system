@@ -8,13 +8,14 @@ De opdrachten uit de handleiding op pagina 14 worden in dit bestand berekent.
 import numpy as np
 
 # variables
+dichtheid = 1024  # kg/m^3
 snelheid_kn = np.array([3, 11.5])  # kn
 ship_speed = snelheid_kn * .514  # m/s
 volgstroomgetal = .25  # (geen eenheid)
 toerental = np.array([8/6, 14/6])  # s^-1
 schroefdiameter = 2.53  # m
-K_T = np.array([])
-K_Q = np.array([])
+K_T = np.array([.32, .16])
+K_Q = np.array([.043, .027])
 
 
 # functions
@@ -51,8 +52,20 @@ def open_water_rendement(v_s):
     :param v_s:
     :return:
     """
-    eta_0 = K_T * snelheidsgraad(v_s) / K_Q / 2 / np.pi
+    eta_0 = np.zeros(len(v_s))
+    for k in range(len(eta_0)):
+        eta_0[k] = K_T[k] * snelheidsgraad(v_s)[k] / K_Q[k] / 2 / np.pi
     return eta_0
+
+
+def thrust():
+    t = K_T * dichtheid * toerental ** 2 * schroefdiameter ** 4
+    return t
+
+
+def as_koppel():
+    q = K_Q * dichtheid * toerental ** 2 * schroefdiameter ** 5
+    return q
 
 
 # prints & plots
@@ -64,10 +77,10 @@ if __name__ == '__main__':
             J = {snelheidsgraad(ship_speed)}
             K_T = {K_T}
             K_Q = {K_Q}
-            openwater rendement = {open_water_rendement(ship_speed)}
+            open water rendement = {open_water_rendement(ship_speed)}
     c)  Bepaal de stuwkracht T en het benodigde askopppel Q in beide condities:
-            T = {None}
-            Q = {None}
+            T = {thrust()}
+            Q = {as_koppel()}
     d)  Hoeveel kan het open water rendement verbeterd worden in de vissende conditie door gebruik te maken 
         van een verstelbare schroef (variabele spoed) en hoe groot is dan de optimale spoedverhouding voor de 
         vissende conditie? J, K_T en K_Q blijven gelijk.
