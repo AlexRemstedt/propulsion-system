@@ -14,8 +14,8 @@ ship_speed = snelheid_kn * .514  # m/s
 volgstroomgetal = .25  # (geen eenheid)
 toerental = np.array([8/6, 14/6])  # s^-1
 schroefdiameter = 2.53  # m
-K_T = np.array([.32, .16])
-K_Q = np.array([.043, .027])
+K_T = np.array([.32, .16])  # Stuwkracht coëfficient
+K_Q = np.array([.043, .027])  # Askoppel coëfficient
 
 
 # functions
@@ -59,11 +59,21 @@ def open_water_rendement(v_s):
 
 
 def thrust():
+    """
+    Bereken de voortstuwende kracht
+
+    :return: thrust
+    """
     t = K_T * dichtheid * toerental ** 2 * schroefdiameter ** 4
     return t
 
 
 def as_koppel():
+    """
+    Bereken het koppel in de as
+
+    :return: askoppel
+    """
     q = K_Q * dichtheid * toerental ** 2 * schroefdiameter ** 5
     return q
 
@@ -84,4 +94,6 @@ if __name__ == '__main__':
     d)  Hoeveel kan het open water rendement verbeterd worden in de vissende conditie door gebruik te maken 
         van een verstelbare schroef (variabele spoed) en hoe groot is dan de optimale spoedverhouding voor de 
         vissende conditie? J, K_T en K_Q blijven gelijk.
+        
+        Uit de tabel blijkt dat een P/D van {.6} het optimaalste is voor vissende condities.
     """)
