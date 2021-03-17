@@ -1,8 +1,10 @@
 """
 Alex Remstedt
-15/03/2021
+17/03/2021
 
 De opdrachten uit de handleiding op pagina 14 worden in dit bestand berekent.
+Er wordt gerefereerd naar een figuur, dit figuur vind men terug als figuur 3 uit de handleiding of figuur 56 uit het
+dictaat van dr.ir. P. de Jong (2014)
 """
 # imports
 import numpy as np
