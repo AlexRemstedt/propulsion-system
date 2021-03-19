@@ -188,8 +188,8 @@ def q_in(p, n):
     return q
 
 
-def effective_engine_efficiency(p, n):
-    eta = eta_td * (eta_td * q_in(p, n) - w_mechanical_loss(n)) / eta_td / q_in(p, n) * (Q_comb - q_cooling_loss(X_parms)) / Q_comb
+def effective_engine_efficiency(p, n, x):
+    eta = eta_td * (eta_td * q_in(p, n) - w_mechanical_loss(n)) / eta_td / q_in(p, n) * (Q_comb - q_cooling_loss(x)) / Q_comb
     return eta
 
 
@@ -241,12 +241,14 @@ P_T = np.zeros(tmax)  # Thrust power [kW]
 P_E = np.zeros(tmax)  # Engine power [kW]
 J = np.zeros(tmax)  # Advance ratio [-]
 
+eta_e = np.zeros(tmax)
+W_e = np.zeros(tmax)
+
 # ------------- Run simulation -----------------------------------------------
 start = time.perf_counter()
 
 for k in range(tmax - 1):
     # advance ratio
-    eta_e[k + 1] = effective_engine_efficiency(P_E[k], n_e)
     J[k + 1] = ((v_a[k] / n_p[k]) / D_p)
     # Thrust and torque
     F_prop[k] = (((k_t_a * J[k + 1] ** 2) + (k_t_b * J[k + 1]) + k_t_c) * n_p[k] ** 2) * rho_sw * D_p ** 4
@@ -286,12 +288,13 @@ for k in range(tmax - 1):
     # Fuel consumption
     out_fc[k + 1] = integrate.simps(m_flux_f[:k + 2], dx=0.01) + out_fc[0]
     Q_f = X * m_f_nom * LHV
-    W_e = Q_f * eta_e
+    W_e[k + 1] = Q_f * eta_e[k + 1]
     # Brake power
-    P_b[k + 1] = (W_e * n_e[k + 1] * i) / k_es
+    P_b[k + 1] = (W_e[k + 1] * n_e[k + 1] * i) / k_es
     # Engine torque
     M_b[k + 1] = P_b[k + 1] / (2 * math.pi * n_e[k + 1])
     M_Trm[k + 1] = M_b[k + 1] * i_gb * eta_TRM
+    eta_e[k + 1] = effective_engine_efficiency(P_E[k + 1], n_e[k + 1], X)
 
 # EU just to be sure
 v_s[0] = 0
@@ -300,5 +303,16 @@ v_s[1] = 0
 print(R[-1])
 print(R_golf[-1])
 
-plt.plot(time, eta_e)
-plt.show()
+fig = plt.figure()
+
+# Figuur 1
+ax1 = fig.add_subplot(2, 1, 1)
+ax1.plot(mytime[1:], eta_e[1:])
+ax1.grid()
+
+# Figuur 2
+ax2 = fig.add_subplot(2, 1, 2)
+ax2.plot(mytime[1:], ov_X_set[1:])
+ax2.grid()
+
+fig.savefig('fig/TR4.png')
