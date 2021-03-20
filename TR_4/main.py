@@ -72,7 +72,6 @@ Q_comb_loss = 0
 eta_td = .52
 Q_comb = 56140  # Kevin leg dit ff uit
 
-
 # initial values
 in_p = 3.2830  # initial rpm
 iv_t_control = np.array([0, tmax])
@@ -150,50 +149,84 @@ def golfweerstand(snelheid_schip, wrijvingcoef):
     return vormweerstand
 
 
-def q_cooling_loss(X):
+def q_cooling_loss(x):
     """
     Calculate energy loss due to cooling
 
     Parameters
     ----------
-    X
+    x
         Fuel ratio
 
     Returns
     -------
         lost cooling warmth
     """
-    q = 1908.8 + 7635.2 * X
+    q = 1908.8 + 7635.2 * x
     return q
 
-def w_mechanical_loss(n_e):
+
+def w_mechanical_loss(n):
     """
     calculate lost mechanical work
 
     Parameters
     ----------
-    n_e
+    n
         ratio of rpm
 
     Returns
     -------
         work
     """
-    work = 711.1 + 1659.3 * n_e
+    work = 711.1 + 1659.3 * n
     return work
 
 
 def q_in(p, n):
-    q = p / n / eta_td
+    """
+    Calculate heat input
+
+    Parameters
+    ----------
+    p : float
+        power
+    n : float
+        RPM
+
+    Returns
+    -------
+    float
+        input heat
+
+    """
+    q = p / n / eta_td * 2
     return q
 
 
 def effective_engine_efficiency(p, n, x):
-    eta = eta_td * (eta_td * q_in(p, n) - w_mechanical_loss(n)) / eta_td / q_in(p, n) * (Q_comb - q_cooling_loss(x)) / Q_comb
+    """
+    Calculate the efficiency
+
+    Parameters
+    ----------
+    p : float
+        Power
+    n : float
+        Rpm
+    x : float
+        Fuel rack
+
+    Returns
+    -------
+    Effective efficiency
+    """
+    eta = eta_td * (eta_td * q_in(p, n) - w_mechanical_loss(n)) / eta_td / q_in(p, n) * (Q_comb -
+                                                                                         q_cooling_loss(x)) / Q_comb
     return eta
 
 
-# -------- Make arrays -------------------------------------------------------
+# -------- Make arrays ---------
 
 # Time
 mytime = np.linspace(0, tmax - 1, tmax)
@@ -255,8 +288,8 @@ for k in range(tmax - 1):
     M_prop[k] = ((((k_q_d * J[k + 1] ** 2) + (k_q_e * J[k + 1]) + k_q_f) * n_p[k] ** 2) * rho_sw * D_p ** 5) / eta_R
     KT[k + 1] = ((k_t_a * J[k + 1] ** 2) + (k_t_b * J[k + 1]) + k_t_c)
     KQ[k + 1] = ((k_q_d * J[k + 1] ** 2) + (k_q_e * J[k + 1]) + k_q_f)
-    P_O[k + 1] = ((((k_q_d * J[k + 1] ** 2) + (k_q_e * J[k + 1]) + k_q_f) * n_p[k] ** 2) * rho_sw * D_p ** 5) \
-                 * n_p[k] * 2 * math.pi
+    P_O[k + 1] = ((((k_q_d * J[k + 1] ** 2) + (k_q_e * J[k + 1]) + k_q_f) * n_p[k] ** 2) * rho_sw * D_p ** 5) * \
+        n_p[k] * 2 * math.pi
     P_p[k + 1] = M_prop[k] * n_p[k] * 2 * math.pi
     # Calculate acceleration from resulting force --> ship speed & tr.distance
     sum_a[k + 1] = ((F_prop[k] - (R[k] / (1 - t))) / m_ship)
@@ -300,9 +333,6 @@ for k in range(tmax - 1):
 v_s[0] = 0
 v_s[1] = 0
 # -------------- Plot Figure -------------------------------------------------
-print(R[-1])
-print(R_golf[-1])
-
 fig = plt.figure()
 
 # Figuur 1
