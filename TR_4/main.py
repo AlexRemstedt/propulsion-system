@@ -338,13 +338,11 @@ v_s[1] = 0
 fig = plt.figure()
 
 # Figuur 1
-ax1 = fig.add_subplot(2, 1, 1)
+ax1 = fig.add_subplot(1, 1, 1)
 ax1.plot(mytime[1:], eta_e[1:])
+ax1.set(title='Effectieve energie',
+        xlabel='Tijd [s]',
+        ylabel='Efficientie [-]')
 ax1.grid()
-
-# Figuur 2
-ax2 = fig.add_subplot(2, 1, 2)
-ax2.plot(mytime[1:], ov_X_set[1:])
-ax2.grid()
 
 fig.savefig('fig/TR4.png')
