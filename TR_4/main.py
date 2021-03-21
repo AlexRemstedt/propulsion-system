@@ -224,7 +224,7 @@ def effective_engine_efficiency(p, n, x):
     Effective efficiency
     """
     eta = eta_td * (eta_td * q_in(n) - w_mechanical_loss(n)) / \
-        eta_td / q_in(n, x) * (Q_comb - q_cooling_loss(x)) / Q_comb
+        eta_td / q_in(x) * (Q_comb - q_cooling_loss(x)) / Q_comb
     return eta
 
 
