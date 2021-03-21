@@ -339,8 +339,8 @@ fig = plt.figure()
 
 # Figuur 1
 ax1 = fig.add_subplot(1, 1, 1)
-ax1.plot(mytime[1:], eta_e[1:])
-ax1.set(title='Effectieve energie',
+ax1.plot(mytime[5:], eta_e[5:])
+ax1.set(title='Effectief rendement',
         xlabel='Tijd [s]',
         ylabel='Efficientie [-]')
 ax1.grid()
