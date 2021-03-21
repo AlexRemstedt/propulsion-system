@@ -10,7 +10,6 @@ import math
 import matplotlib.pyplot as plt
 import time
 import scipy.interpolate as interp
-
 from scipy import integrate
 
 # ----------- parameters for simulation --------------------------------------
@@ -92,15 +91,15 @@ def cws_berekening():
     reference = np.linspace(0, tmax - 1, tmax)
 
     array_interp = interp.interp1d(np.arange(cwm.size), cwm, kind='cubic')
-    cws = array_interp(np.linspace(0, cwm.size - 1, reference.size))
+    cws_f = array_interp(np.linspace(0, cwm.size - 1, reference.size))
 
-    return cws
+    return cws_f
 
 
 wrijvingscoef = cws_berekening()
 
 
-def R_schip(snelheid_schip, wrijvingcoef):
+def r_schip(snelheid_schip, wrijvingcoef):
     reynolds = snelheid_schip * lengte_s / kin_vis
 
     if reynolds == 0:
@@ -124,8 +123,8 @@ def vormweerstand(snelheid_schip):
 
     cts = vormfactor * cfs
     global Y
-    vormweerstand = abs(Y * 0.5 * cts * rho_sw * oppervlakte_s * snelheid_schip ** 2)
-    return vormweerstand
+    vw = abs(Y * 0.5 * cts * rho_sw * oppervlakte_s * snelheid_schip ** 2)
+    return vw  # vormweerstand
 
 
 def wrijfweerstand(snelheid_schip):
@@ -145,8 +144,8 @@ def wrijfweerstand(snelheid_schip):
 def golfweerstand(snelheid_schip, wrijvingcoef):
     cts = wrijvingcoef
     global Y
-    vormweerstand = abs(Y * 0.5 * cts * rho_sw * oppervlakte_s * snelheid_schip ** 2)
-    return vormweerstand
+    vw = abs(Y * 0.5 * cts * rho_sw * oppervlakte_s * snelheid_schip ** 2)
+    return vw  # vormweerstand
 
 
 def q_cooling_loss(x):
