@@ -51,13 +51,14 @@ print('propellor data loaded')
 
 # engine data
 m_f_nom = 1.314762  # nominal fuel injection [g]
+n_eng_nom = 900 / 60  # Hz
 # eta_e = 0.3800  # nominal engine efficiency [-]
 i = 6  # number of cylinders [-]
 k_es = 2  # k-factor for engines based on nr.of strokes per cycle
 P_b = np.zeros(tmax)  # engine power [kW]
 P_b[0] = 960  # Nominal engine power [kW]
 M_b = np.zeros(tmax)  # engine torque [Nm]
-M_b[0] = P_b[0] * 1000 / 2 / math.pi / (900 / 60)  # ([P_b*1000/2/math.pi/n_eng_nom])
+M_b[0] = P_b[0] * 1000 / 2 / math.pi / n_eng_nom  # ([P_b*1000/2/math.pi/n_eng_nom])
 print('engine data loaded')
 
 # gearbox data
@@ -178,13 +179,16 @@ def w_mechanical_loss(n):
     -------
         work
     """
-    work = 711.1 + 1659.3 * n
+    work = 711.1 + 1659.3 * n / n_eng_nom
     return work
 
 
-def q_in(p, n):
+def q_in(x):
     """
     Calculate heat input
+
+    P_i = W_i * n_e / 2
+    Q_in = W_i / eta_td
 
     Parameters
     ----------
@@ -199,8 +203,7 @@ def q_in(p, n):
         input heat
 
     """
-    q = p / n / eta_td * 2
-    return q
+    return Q_comb - q_cooling_loss(x)
 
 
 def effective_engine_efficiency(p, n, x):
@@ -220,8 +223,8 @@ def effective_engine_efficiency(p, n, x):
     -------
     Effective efficiency
     """
-    eta = eta_td * (eta_td * q_in(p, n) - w_mechanical_loss(n)) / eta_td / q_in(p, n) * (Q_comb -
-                                                                                         q_cooling_loss(x)) / Q_comb
+    eta = eta_td * (eta_td * q_in(n) - w_mechanical_loss(n)) / \
+        eta_td / q_in(n, x) * (Q_comb - q_cooling_loss(x)) / Q_comb
     return eta
 
 
@@ -246,7 +249,7 @@ n_e[0] = 900 / 60  # Nominal engine speed in rotations per second [Hz]
 # Resistance [N]
 R = np.zeros(tmax)
 Y = ov_Y_set[0]
-R[0] = R_schip(v_s0, 0)
+R[0] = r_schip(v_s0, 0)
 R_vorm = np.zeros(tmax)
 R_vorm[0] = vormweerstand(v_s0)
 R_wrijving = np.zeros(tmax)
@@ -276,7 +279,7 @@ J = np.zeros(tmax)  # Advance ratio [-]
 eta_e = np.zeros(tmax)
 W_e = np.zeros(tmax)
 
-# ------------- Run simulation -----------------------------------------------
+# ------------- Run simulation ---------------
 start = time.perf_counter()
 
 for k in range(tmax - 1):
@@ -304,7 +307,7 @@ for k in range(tmax - 1):
     # Resistance
     cws = np.interp(v_s[k + 1], snelheden, wrijvingscoef)
     Y = ov_Y_set[k]
-    R[k + 1] = R_schip(v_s[k + 1], cws)
+    R[k + 1] = r_schip(v_s[k + 1], cws)
     P_E[k + 1] = v_s[k + 1] * R[k + 1]
     R_vorm[k + 1] = vormweerstand(v_s[k + 1])
     R_wrijving[k + 1] = wrijfweerstand(v_s[k + 1])
