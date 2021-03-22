@@ -192,10 +192,8 @@ def q_in(x):
 
     Parameters
     ----------
-    p : float
-        power
-    n : float
-        RPM
+    x : float
+        brandstofheugelstand
 
     Returns
     -------
@@ -206,18 +204,17 @@ def q_in(x):
     return Q_comb - q_cooling_loss(x)
 
 
-def eta_comb():
-    eta = Q_f / Q_f
-    return eta
+def combustion_eff():
+    return 1
 
 
-def eta_m(n, x):
-    w_i = q_in(x) * eta_td
+def mech_eff(n, x):
+    w_i = q_in(x) * eta_td[0]
     eta = (w_i - w_mechanical_loss(n)) / w_i
     return eta
 
 
-def eta_q(x):
+def heat_eff(x):
     eta = q_in(x) / Q_comb
     return eta
 
@@ -239,7 +236,7 @@ def effective_engine_efficiency(n, x):
     -------
     Effective efficiency
     """
-    eta = eta_m(n, x) * eta_comb() * eta_q(x) * eta_td
+    eta = mech_eff(n, x) * combustion_eff() * heat_eff(x) * eta_td[0]
     return eta
 
 
