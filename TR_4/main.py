@@ -70,7 +70,7 @@ print('gearbox data loaded')
 # efficiency parameters
 Q_comb_loss = 0
 eta_td = .52
-Q_comb = 56140  # Kevin leg dit ff uit
+Q_comb = 56140  # m_f * h ** L
 
 # initial values
 in_p = 3.2830  # initial rpm
@@ -206,7 +206,23 @@ def q_in(x):
     return Q_comb - q_cooling_loss(x)
 
 
-def effective_engine_efficiency(p, n, x):
+def eta_comb():
+    eta = Q_f / Q_f
+    return eta
+
+
+def eta_m(n, x):
+    w_i = q_in(x) * eta_td
+    eta = (w_i - w_mechanical_loss(n)) / w_i
+    return eta
+
+
+def eta_q(x):
+    eta = q_in(x) / Q_comb
+    return eta
+
+
+def effective_engine_efficiency(n, x):
     """
     Calculate the efficiency
 
@@ -223,8 +239,7 @@ def effective_engine_efficiency(p, n, x):
     -------
     Effective efficiency
     """
-    eta = eta_td * (eta_td * q_in(n) - w_mechanical_loss(n)) / \
-        eta_td / q_in(x) * (Q_comb - q_cooling_loss(x)) / Q_comb
+    eta = eta_m(n, x) * eta_comb() * eta_q(x) * eta_td
     return eta
 
 
@@ -329,7 +344,7 @@ for k in range(tmax - 1):
     # Engine torque
     M_b[k + 1] = P_b[k + 1] / (2 * math.pi * n_e[k + 1])
     M_Trm[k + 1] = M_b[k + 1] * i_gb * eta_TRM
-    eta_e[k + 1] = effective_engine_efficiency(P_E[k + 1], n_e[k + 1], X)
+    eta_e[k + 1] = effective_engine_efficiency(n_e[k + 1], X)
 
 # EU just to be sure
 v_s[0] = 0
@@ -339,7 +354,7 @@ fig = plt.figure()
 
 # Figuur 1
 ax1 = fig.add_subplot(1, 1, 1)
-ax1.plot(mytime[5:], eta_e[5:])
+ax1.plot(mytime[1:], eta_e[1:])
 ax1.set(title='Effectief rendement',
         xlabel='Tijd [s]',
         ylabel='Efficientie [-]')
