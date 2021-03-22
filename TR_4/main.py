@@ -69,7 +69,7 @@ print('gearbox data loaded')
 
 # efficiency parameters
 Q_comb_loss = 0
-eta_td = .52
+eta_td = np.full(tmax, .52)
 Q_comb = 56140  # m_f * h ** L
 
 # initial values
@@ -289,6 +289,8 @@ P_E = np.zeros(tmax)  # Engine power [kW]
 J = np.zeros(tmax)  # Advance ratio [-]
 
 eta_e = np.zeros(tmax)
+eta_q = np.zeros(tmax)
+eta_m = np.zeros(tmax)
 W_e = np.zeros(tmax)
 
 # ------------- Run simulation ---------------
@@ -341,6 +343,8 @@ for k in range(tmax - 1):
     # Engine torque
     M_b[k + 1] = P_b[k + 1] / (2 * math.pi * n_e[k + 1])
     M_Trm[k + 1] = M_b[k + 1] * i_gb * eta_TRM
+    eta_q[k + 1] = heat_eff(X)
+    eta_m[k + 1] = mech_eff(n_e[k + 1], X)
     eta_e[k + 1] = effective_engine_efficiency(n_e[k + 1], X)
 
 # EU just to be sure
