@@ -337,6 +337,7 @@ for k in range(tmax - 1):
     # Fuel consumption
     out_fc[k + 1] = integrate.simps(m_flux_f[:k + 2], dx=0.01) + out_fc[0]
     Q_f = X * m_f_nom * LHV
+    eta_e[k + 1] = effective_engine_efficiency(n_e[k + 1], X)
     W_e[k + 1] = Q_f * eta_e[k + 1]
     # Brake power
     P_b[k + 1] = (W_e[k + 1] * n_e[k + 1] * i) / k_es
@@ -345,7 +346,6 @@ for k in range(tmax - 1):
     M_Trm[k + 1] = M_b[k + 1] * i_gb * eta_TRM
     eta_q[k + 1] = heat_eff(X)
     eta_m[k + 1] = mech_eff(n_e[k + 1], X)
-    eta_e[k + 1] = effective_engine_efficiency(n_e[k + 1], X)
 
 # EU just to be sure
 v_s[0] = 0
