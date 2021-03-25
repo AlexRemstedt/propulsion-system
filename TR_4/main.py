@@ -355,13 +355,12 @@ fig = plt.figure()
 
 # Figuur 1
 ax1 = fig.add_subplot(1, 1, 1)
-ax1.plot(mytime[1:], eta_e[1:], label='Effectief rendement')
-ax1.plot(mytime[1:], eta_td[1:], label='Thermodynamisch rendement')
-ax1.plot(mytime[1:], eta_q[1:], label='Warmte rendement')
-ax1.plot(mytime[1:], eta_m[1:], label='Mechanisch rendement')
-ax1.set(title='Effectief rendement',
-        xlabel='Tijd [s]',
-        ylabel='Efficientie [-]')
+ax1.plot(P_b[15:], eta_e[15:], label='Effectief')
+ax1.plot(P_b[15:], eta_td[15:], label='Thermodynamisch')
+ax1.plot(P_b[15:], eta_q[15:], label='Warmte')
+ax1.plot(P_b[15:], eta_m[15:], label='Mechanisch')
+ax1.set(xlabel='Vermogen',
+        ylabel='Rendement [-]')
 ax1.grid()
 ax1.legend()
 
